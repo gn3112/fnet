@@ -1,0 +1,9 @@
+<html>
+  <body>
+    <img src="/test.jpeg"/>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="submit" name="button" value="Forward">
+    </form>
+    <script>setInterval(() => document.querySelector('img').src = '/test.jpeg?' + Date.now(), 150)</script>
+  </body>
+</html>

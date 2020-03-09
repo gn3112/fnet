@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS store (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  image BLOB
+);
+
+INSERT OR IGNORE INTO store (id, image) VALUES (1, '');
+INSERT OR IGNORE INTO store (id, image) VALUES (2, '');
