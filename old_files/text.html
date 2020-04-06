@@ -1,0 +1,26 @@
+<html>
+  <body>
+    <h1>Hello</h1>
+    <img src="/img" id="img1">
+    <form method="POST" enctype="multipart/form-data" action="/">
+      <input type="submit" name="button" value="Forward">
+    </form>
+    <script>
+      var newImage = new Image();
+      newImage.src = "/img";
+
+      function updateImage()
+      {
+      if(newImage.complete) {
+          document.getElementById("img1").src = newImage.src;
+          newImage = new Image();
+          newImage.src = "/img";
+      }
+
+          setTimeout(updateImage, 1000);
+      }
+      updateImage();
+    </script>
+
+  </body>
+</html>

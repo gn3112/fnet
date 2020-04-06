@@ -8,6 +8,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from torch.utils.data.sampler import SubsetRandomSampler
+import json
 
 class Fruit_Classifier(nn.Module):
     def __init__(self):
@@ -54,6 +55,8 @@ if __name__ == "__main__":
         ])
 
     training_data = datasets.ImageFolder(root="fruits-360_dataset/fruits-360/Training/", transform=data_transform)
+    # with open('class_idx.txt', 'w') as outfile:
+    #     json.dump(training_data.class_to_idx, outfile)
     max = 0
 
     indices = list(range(len(training_data)))
