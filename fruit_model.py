@@ -204,6 +204,8 @@ if __name__ == "__main__":
     
     idx_p = 0
     fail_examples = {}
+    idx_to_name = {values: keys for keys, values in training_data.class_to_idx.items()}
+
 
     for inputs, labels in test_loader:
         inputs = inputs.to(device)
@@ -234,9 +236,9 @@ if __name__ == "__main__":
 
     cf = confusion_matrix(y_true[0], y_pred[0])
     class_idx = y_pred[0] + y_true[0]
+
     class_idx = list(dict.fromkeys(class_idx))
     class_idx.sort()
-    idx_to_name = {values: keys for keys, values in training_data.class_to_idx.items()}
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
