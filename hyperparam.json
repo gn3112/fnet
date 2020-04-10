@@ -1,0 +1,5 @@
+{"epochs": 24,
+"batch_size": 90,
+"learning_rate":0.01,
+"exp_name":"trial_2_lower_lr",
+"DEBUG":0}
