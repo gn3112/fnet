@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <img src="/image_capture/test.jpeg"/>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="submit" name="image" value="Img">
+      <input type="submit" name="button" value="Forward">
+      <select name="text">
+          {% for item in items %}
+          <option value="{{item}}"> {{item}} </option>
+          {%endfor%}
+          <option value="Other"> Other </option>
+      </select>
+    </form>
+    <script>setInterval(() => document.querySelector('img').src = '/image_capture/test.jpeg?' + Date.now(), 100)</script>
+  </body>
+</html>
