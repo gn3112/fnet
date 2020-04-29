@@ -1,3 +1,6 @@
+tests/
+EXP/
+old_files/
 flaskr/__pycache__/
 __pycache__/
 .DS_Store
