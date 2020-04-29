@@ -1,6 +1,24 @@
 import cv2
 import numpy as np
 from torchvision.transforms import Compose, ToPILImage, Resize, ToTensor
+import os
+
+def create_dir_exp(exp_type, exp_name): 
+    exp_types = ["VGG_EXP", "model_exp"]
+    for exp in exp_types:
+        if exp in exp_type
+            exp_type_correct = True
+
+    if not exp_type_correct:
+        raise NameError("Please specify correct exp_type.")
+
+    final_path = os.path.join("EXP", exp_type, exp_name)
+
+    if os.path.exists(final_path):
+        raise NameError("Experiment {} already exists.".format(exp_name))
+
+    return final_path
+
 def cv_format(img):
     img = img * 255
     img = img.transpose(1, 2, 0)
