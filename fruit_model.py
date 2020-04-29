@@ -4,12 +4,19 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets, transforms
 from torch.nn import functional as F
 from torchvision.utils import make_grid, save_image
+
 import os
+
 import matplotlib.pyplot as plt
+
 import numpy as np
+
 from torch.utils.data.sampler import SubsetRandomSampler
+
 import json
+
 from sklearn.metrics import confusion_matrix
+
 from visdom import Visdom
 
 class Fruit_Classifier(nn.Module):
@@ -30,11 +37,17 @@ class Fruit_Classifier(nn.Module):
     def forward(self, x):
         # save_image(x, "test.png")
         x = self.maxpool1(F.relu(self.conv1(x)))
+        print(x.size())
+        save_image(x.view(16,1,50,50),"intra_layer.png",normalize=True)        
         x = self.maxpool2(F.relu(self.conv2(x)))
+        print(x.size())
+        save_image(x.view(32,1,23,23),"intra_layer2.png",normalize=True)
         x = self.maxpool3(F.relu(self.conv3(x)))
+        print(x.size())
+        save_image(x.view(64,1,11,11),"intra_layer3.png",normalize=True)
         x = self.maxpool4(F.relu(self.conv4(x)))
         x = F.relu(self.fc1(x.view(-1,5*5*128)))
-        x = F.relu(self.fc2(x))
+        x = self.fc2(x)
         return self.softmax(x)
 
 # Extra Transforms:
@@ -89,7 +102,7 @@ if __name__ == "__main__":
         transforms.RandomHorizontalFlip(p=0.3),
         transforms.RandomVerticalFlip(p=0.3),
         transforms.RandomApply([transforms.RandomAffine(180,fillcolor=(255,255,255))],p=1),
-        transforms.RandomApply([transforms.RandomAffine(0,fillcolor=(255,255,255), scale=(0.4,1))],p=0.4),
+        transforms.RandomApply([transforms.RandomAffine(0,fillcolor=(255,255,255), translate=(0.3,0.3), scale=(0.4,0.6))],p=1),
         transforms.Resize(100),
         transforms.ToTensor(),
         transforms.RandomApply([AddGaussianNoise()],p=0.4),
@@ -98,6 +111,10 @@ if __name__ == "__main__":
     training_data = datasets.ImageFolder(root="new_fruit_dataset/Training/", transform=data_transform)
     # with open('class_idx.txt', 'w') as outfile:
     #     json.dump(training_data.class_to_idx, outfile)
+    
+    img = training_data[1][0].numpy()
+    plt.imshow(np.transpose(img, [1,2,0]))
+    plt.show()
 
     indices = list(range(len(training_data)))
     split = int(np.floor(0.15 * len(training_data)))
@@ -267,6 +284,4 @@ if __name__ == "__main__":
     if not DEBUG:
         torch.save(net.state_dict(), os.path.join(exp_path,"model.pt"))
 
-    # img = training_data[1][0].numpy()
-    # plt.imshow(np.transpose(img, [1,2,0]))
-    # plt.show()
+
