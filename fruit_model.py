@@ -6,7 +6,8 @@ from torch.nn import functional as F
 from torchvision.utils import make_grid, save_image
 
 import os
-
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -88,11 +89,8 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    try:
-        viz = Visdom()
-    except:
-        print('Could not find Visdom server')
-        pass
+    cfg = {"server": "localhost","port": 8998}
+    vis = Visdom('http://' + cfg["server"], port = cfg["port"])    
 
     fruit_selection = ["Banana", "Tomato", "Onion", "Avocado", "Clementine", "Mandarine"]
     fruit_names = os.listdir("new_fruit_dataset/Training/")
@@ -241,22 +239,21 @@ if __name__ == "__main__":
             break
         else:
             accuracy_test = running_correct_test.type(torch.DoubleTensor)/len(test_data)
-
-        for i in range(len(y_pred[0])):
-            if y_pred[0][i] != y_true[0][i]:
-                save_image(inputs[i,:,:,:],os.path.join(exp_path,"fail_{}.jpeg".format(idx_p)))
+        
+        for i in range(inputs.size()[0]):
+            i_img = len(y_pred[0])-inputs.size()[0]+i
+            if y_pred[0][i_img] != y_true[0][i_img]:
+                save_image(inputs[i_img,:,:,:],os.path.join(exp_path,"fail_{}.jpeg".format(idx_p)))
                 fail_examples[idx_p] = {'img_file_name':"fail_{}.jpeg".format(idx_p),
-                        'class':idx_to_name[y_true[0][i]],
-                        'predicted':idx_to_name[y_pred[0][i]],
+                        'class':idx_to_name[y_true[0][i_img]],
+                        'predicted':idx_to_name[y_pred[0][i_img]],
                         'confidence':round(probas[i].item(),3)}
                 idx_p += 1
-
     cf = confusion_matrix(y_true[0], y_pred[0])
     class_idx = y_pred[0] + y_true[0]
 
     class_idx = list(dict.fromkeys(class_idx))
     class_idx.sort()
-    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     cax = ax.matshow(cf)
